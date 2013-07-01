@@ -1,41 +1,45 @@
 
-
-var circle1 = {
+var circleMagenta = {
 		type:"circle", 
-		color:"#E8EDFF",
+		color:"#800000",
 		radius:10,
-		xCenter:10, //X coordinate of the center
-		yCenter:10 //Y coordinate of the center
+		xCenter:15,
+		yCenter:15
 };
 
-var circle2 = {
+var circleDeepBlueSky = {
 		type:"circle", 
-		color:"#29344B",
+		color: "#00BFFF",
 		radius:20,	
-		xCenter:20, //X coordinate of the center
-		yCenter:20 //Y coordinate of the center
+		xCenter:30,
+		yCenter:30
 };
 
-var square = {
+var squarePurple = {
 		type:"square",
 		edge:0,
-		color:1,
-		xCenter:0, //X coordinate of the center
-		yCenter:0 //Y coordinate of the center
+		color:"#800080",
+		xCenter:0,
+		yCenter:0
 };
 
-var triangle = {
+var triangleOrange = {
 		type:"triangle",
-		color:1,
-		xCenter:0, //X coordinate of the center
-		yCenter:0, //Y coordinate of the center
+		color:"#FFA500",
+		xCenter:0,
+		yCenter:0,
 		edge1:1,
 		edge2:1,
 		edge3:1		
 };
 
-function run(){
-	inscribeShapeinShape(circle1,circle2);
+function clearCanvas(){
+	var c=document.getElementById("myCanvas");
+	c.width = c.width;
+}
+
+function runCircleInscriber(){
+	inscribeShapeinShape( circleDeepBlueSky,circleMagenta);
 }
 
 //Inscribe smallShape in largeShape, only 
@@ -44,24 +48,24 @@ function run(){
 function inscribeShapeinShape(smallShape, largeShape){
 	
 	var compare =compareSize(smallShape, largeShape);
-	
-	drawShape(largeShape);
-	
-	var coordinatesSmallShape = {
-			x:0,
-			y:0
-	};
+	var xCoordinate=0;
 	
 	if((compare == 0) || (compare==-1)){
-		coordinatesSmallShape = computeSideBySidePositions(smallShape,largeShape);
+		xCoordinate = computeSideBySidePositions(smallShape,largeShape);
 	}
 	else{
-		coordinatesSmallShape = computeConcentricPositions(smallShape,largeShape);
+		xCoordinate = computeConcentricPositions(smallShape,largeShape);
 	}
 	
-	smallShape.xCenter = coordinatesSmallShape.x;
-	smallShape.yCenter = coordinatesSmallShape.y;
+	smallShape.xCenter = xCoordinate;
 	
+	var yCoordinate = computeYCoordinatePosition(smallShape, largeShape);
+	
+	//Shapes are always at same y coordinate
+	smallShape.yCenter = yCoordinate;
+	largeShape.yCenter = yCoordinate;
+	
+	drawShape(largeShape);
 	drawShape(smallShape);
 }
 
@@ -108,25 +112,40 @@ function getSize(shape){
 
 
 //Takes the width of the larger shape to calculate the position of the smaller shape.
-function computeSideBySidePositions(smallShape,largeShape){
-	var sizeLarge = largeShape.getSize();
-	var sizeSmall = smallShape.getSize();
-	var horizontalShift = 2*sizeSmall.width;    ///sizeLarge.width + sizeSmall.width;
+function computeSideBySidePositions(shape1,shape2){
+	var size1 = getSize(shape1);
+	var size2 = getSize(shape2); 
 	
-	var coordinates = {
-			x : largeShape.xCenter + horizontalShift,
-			y : largeShape.yCenter
-	};
+	//var horizontalShift = 2*sizeSmall.width;    
+	var horizontalShift = size1.width/2 + size2.width/2;
+	var xCoordinate=0;
 	
-	return coordinates;
+	if(size1.width>size2.width)
+		xCoordinate =  shape1.xCenter+ horizontalShift;
+	else
+		xCoordinate = shape2.xCenter+ horizontalShift;
+	
+	return xCoordinate;
+}
+
+//Gets the Y coordinate of the larger shape
+function computeYCoordinatePosition(shape1, shape2){
+	
+	var size1 = getSize(shape1);
+	var size2 = getSize(shape2); 
+	
+	var yCoordinate =0;
+	
+	if(size1.height>size2.height)
+		yCoordinate =  shape1.yCenter;
+	else
+		yCoordinate = shape2.yCenter;
+	
+	return yCoordinate;
 }
 
 function computeConcentricPositions(smallShape,largeShape){
-	var coordinates = {
-			x : largeShape.xCenter,
-			y : largeShape.yCenter
-	};
-	return coordinates;
+	return largeShape.xCenter;
 }
 
 function drawShape(shape){
@@ -142,6 +161,7 @@ function drawCircle(x,y,circle){
 	var ctx=c.getContext("2d");
 	ctx.beginPath();
 	ctx.arc(x, y,circle.radius,0,2*Math.PI);
+	ctx.strokeStyle=circle.color;
 	ctx.stroke();
 }
 
@@ -156,3 +176,4 @@ function drawSquare(coordinates,square){
 	//ctx.lineTo(square.xCenter-square.edge/2, square.yCenter,200,100);
 	
 }
+
