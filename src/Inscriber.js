@@ -39,7 +39,15 @@ function clearCanvas(){
 }
 
 function runCircleInscriber(){
-	inscribeShapeinShape( circleDeepBlueSky,circleMagenta);
+	//Circle inside circle
+	///inscribeShapeinShape(circleMagenta,circleDeepBlueSky);
+	
+	//Circle side by side
+	circleDeepBlueSky.xCenter=40;
+	circleDeepBlueSky.yCenter=80;
+	circleMagenta.xCenter = 30;
+	circleMagenta.yCenter = 80;
+	inscribeShapeinShape(circleDeepBlueSky,circleMagenta);
 }
 
 //Inscribe smallShape in largeShape, only 
@@ -112,18 +120,13 @@ function getSize(shape){
 
 
 //Takes the width of the larger shape to calculate the position of the smaller shape.
+//var horizontalShift = size1.width/2 + size2.width/2;
 function computeSideBySidePositions(shape1,shape2){
 	var size1 = getSize(shape1);
-	var size2 = getSize(shape2); 
+	//var size2 = getSize(shape2); 
 	
-	//var horizontalShift = 2*sizeSmall.width;    
-	var horizontalShift = size1.width/2 + size2.width/2;
-	var xCoordinate=0;
-	
-	if(size1.width>size2.width)
-		xCoordinate =  shape1.xCenter+ horizontalShift;
-	else
-		xCoordinate = shape2.xCenter+ horizontalShift;
+	var horizontalShift = size1.width/2;//size1.width/2 + size2.width/2;  
+	var xCoordinate=shape2.xCenter+ horizontalShift;
 	
 	return xCoordinate;
 }
@@ -150,18 +153,20 @@ function computeConcentricPositions(smallShape,largeShape){
 
 function drawShape(shape){
 	if(shape.type=="circle"){
-		drawCircle(shape.xCenter, shape.yCenter, shape);
+		drawCircle(shape.xCenter, shape.yCenter, shape.radius, shape.color);
 	}
 	else
 		if(shape.type=="square") drawSquare(shape);
 }
 
-function drawCircle(x,y,circle){
+function drawCircle(x,y,radius,color){
 	var c=document.getElementById("myCanvas");
 	var ctx=c.getContext("2d");
 	ctx.beginPath();
-	ctx.arc(x, y,circle.radius,0,2*Math.PI);
-	ctx.strokeStyle=circle.color;
+	//console.log("circle: x="+x+",y="+y);
+	var arcSize = 2*Math.PI;
+	ctx.arc(x, y,radius,0,arcSize);
+	ctx.strokeStyle=color;
 	ctx.stroke();
 }
 
@@ -174,6 +179,5 @@ function drawSquare(coordinates,square){
 	var pointBottomRight = {};
 	var pointBottomLeft = {};
 	//ctx.lineTo(square.xCenter-square.edge/2, square.yCenter,200,100);
-	
 }
 
