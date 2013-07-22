@@ -1,10 +1,12 @@
 
+//Default values to help user -----------------------------------------------
+
 var circleMagenta = {
 		type:"circle", 
-		color:"#800000",
+		color:"#800090",
 		radius:10,
 		xCenter:15,
-		yCenter:15
+		yCenter:15,
 };
 
 var circleDeepBlueSky = {
@@ -13,7 +15,7 @@ var circleDeepBlueSky = {
 		radius:20,	
 		xCenter:30,
 		yCenter:30
-};
+};inscribeShapeinShape
 
 var squarePurple = {
 		type:"square",
@@ -33,23 +35,118 @@ var triangleOrange = {
 		edge3:1		
 };
 
+//----------------------------------------------------------------------------
+//Inner and Outer Shapes
+var circleInner = {
+    	type:"circle", 
+		color:"#800000",
+		radius:10,
+		xCenter:15,
+		yCenter:15
+};
+
+var circleOuter = {
+		type:"circle", 
+		color: "#00BFFF",
+		radius:20,	
+		xCenter:30,
+		yCenter:30
+};
+
+var squareInner = {
+		type:"square",
+		edge:0,
+		color:"#800080",
+		xCenter:0,
+		yCenter:0
+};
+
+var squareOuter = {
+    	type:"square",
+		edge:0,
+		color:"#00BFFF",
+		xCenter:0,
+		yCenter:0
+}
+
+var innerShape,outerShape;
+
+//var any = loadDefaultShapes();
+
+//-----------------------------------------------------------------------------------------------------------
+// HANDLING GUI EVENTS
+
 function clearCanvas(){
-	var c=document.getElementById("myCanvas");
+	var c=document.getElementById("inscriberCanvas");
 	c.width = c.width;
 }
 
-function runCircleInscriber(){
-	//Circle inside circle
-	///inscribeShapeinShape(circleMagenta,circleDeepBlueSky);
-	
-	//Circle side by side
-	circleDeepBlueSky.xCenter=40;
-	circleDeepBlueSky.yCenter=80;
-	circleMagenta.xCenter = 30;
-	circleMagenta.yCenter = 80;
-	inscribeShapeinShape(circleDeepBlueSky,circleMagenta);
+function loadDefaultShapes() {
+    alert("loadDefaultShapes");
+    innerShape= setDefaultValues("inner", circleMagenta);
+    outerShape = setDefaultValues("outer", circleDeepBlueSky);
 }
 
+function setDefaultValues(option, shape){
+    var input = document.getElementById("color_"+option);
+    input.value = shape.color;
+    var input2 = document.getElementById("xcenter_"+option);
+    input2.value = shape.xCenter;
+    var input3 = document.getElementById("ycenter_"+option);
+    input3.value = shape.yCenter;
+    var input4 = document.getElementById("height_"+option);
+    input4.value = shape.radius*2;
+}
+
+function handleInscribeButton() {
+    console.log("handleInscribeButton");
+    //Obtain values
+    var op = document.getElementById('selectInnerType');
+    var selItem = op.options[op.selectedIndex].value;
+    var innerShape = initializeShape(selItem,"inner");
+    op = document.getElementById("selectOuterType");
+    selItem = op.options[op.selectedIndex].value;
+    var outerShape = initializeShape(selItem,"outer");
+    
+    
+    //inscribeShapeinShape(innerShape,outerShape);
+
+
+    //Circle inside circle
+    ///(circleMagenta,circleDeepBlueSky);
+
+    //Circle side by side
+    circleDeepBlueSky.xCenter = 40;
+    circleDeepBlueSky.yCenter = 80;
+    circleMagenta.xCenter = 30;
+    circleMagenta.yCenter = 80;
+    inscribeShapeinShape(circleDeepBlueSky, circleMagenta);
+}
+
+function initializeShape(type,option){
+    console.log("initializeShape");
+    var shape;
+    shape.type = type;
+    var input = document.getElementById("color_"+option);
+    shape.color = input.value;
+    input =document.getElementById("xcenter_"+option);
+    shape.xCenter = input.value;
+    input = document.getElementById("ycenter_"+option);
+    shape.yCenter = input.value;
+    input = document.getElementById("height_"+option);
+    shape.height = input.value;
+    
+      if (type == "circle") {
+        shape.radius = shape.height/2;
+    }
+    else {
+        shape.edge = shape.height;
+    }
+    
+    return shape;
+}
+
+//-------------------------------------------------------------------------------------------------------------------------
 //Inscribe smallShape in largeShape, only 
 //if smallShape is actually smaller than largeShape, 
 //otherwise, draw shapes side by side. 
@@ -153,31 +250,38 @@ function computeConcentricPositions(smallShape,largeShape){
 
 function drawShape(shape){
 	if(shape.type=="circle"){
-		drawCircle(shape.xCenter, shape.yCenter, shape.radius, shape.color);
+		drawSquare(shape.xCenter, shape.yCenter, shape.radius, shape.color);
 	}
 	else
-		if(shape.type=="square") drawSquare(shape);
+		if(shape.type=="square") drawSquare(shape.xCenter, shape.yCenter, shape.width, shape.color);
 }
 
-function drawCircle(x,y,radius,color){
-	var c=document.getElementById("myCanvas");
-	var ctx=c.getContext("2d");
-	ctx.beginPath();
-	//console.log("circle: x="+x+",y="+y);
-	var arcSize = 2*Math.PI;
-	ctx.arc(x, y,radius,0,arcSize);
-	ctx.strokeStyle=color;
-	ctx.stroke();
+function drawCircle(x, y, radius, color) {
+    var canvas = document.getElementById("inscriberCanvas");
+    if (canvas != null && canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+        ctx.beginPath();
+        //console.log("circle: x="+x+",y="+y);
+        var arcSize = 2 * Math.PI;
+        ctx.arc(x, y, radius, 0, arcSize);
+        ctx.strokeStyle = color;
+        ctx.stroke();
+    }
+    else { 
+        alert("This page uses HTML 5 to render correctly. Please use Firefox or Chrome.");
+    }
 }
 
-function drawSquare(coordinates,square){
-	var c=document.getElementById("myCanvas");
-	var ctx=c.getContext("2d");
-	ctx.moveTo(0,0);
-	var pointTopLeft ={}; 
-	var pointTopRight ={};
-	var pointBottomRight = {};
-	var pointBottomLeft = {};
-	//ctx.lineTo(square.xCenter-square.edge/2, square.yCenter,200,100);
+function drawSquare(x, y, width, color) {
+    var canvas = document.getElementById("inscriberCanvas");
+    if (canvas != null && canvas.getContext) {
+        var ctx = canvas.getContext("2d");
+        ctx.moveTo(0, 0);
+        ctx.strokeStyle = color;
+        ctx.strokeRect(x, y, width, width);
+    }
+    else { 
+        alert("This page uses HTML 5 to render correctly. Please use Firefox or Chrome.");
+    }
 }
 
