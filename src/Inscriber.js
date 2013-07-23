@@ -69,10 +69,17 @@ var squareOuter = {
 		yCenter:0
 }
 
-var innerShape,outerShape;
+var shape = {
+        type:"",
+		edge:0,
+		color:"#00BFFF",
+		xCenter:0,
+		yCenter:0
+}
 
 //var any = loadDefaultShapes();
 
+//handleInscribeButton();
 //-----------------------------------------------------------------------------------------------------------
 // HANDLING GUI EVENTS
 
@@ -82,9 +89,8 @@ function clearCanvas(){
 }
 
 function loadDefaultShapes() {
-    alert("loadDefaultShapes");
-    innerShape= setDefaultValues("inner", circleMagenta);
-    outerShape = setDefaultValues("outer", circleDeepBlueSky);
+    setDefaultValues("inner", circleMagenta);
+    setDefaultValues("outer", circleDeepBlueSky);
 }
 
 function setDefaultValues(option, shape){
@@ -99,51 +105,35 @@ function setDefaultValues(option, shape){
 }
 
 function handleInscribeButton() {
-    console.log("handleInscribeButton");
+    clearCanvas();
     //Obtain values
     var op = document.getElementById('selectInnerType');
     var selItem = op.options[op.selectedIndex].value;
     var innerShape = initializeShape(selItem,"inner");
     op = document.getElementById("selectOuterType");
     selItem = op.options[op.selectedIndex].value;
-    var outerShape = initializeShape(selItem,"outer");
-    
-    
-    //inscribeShapeinShape(innerShape,outerShape);
-
-
-    //Circle inside circle
-    ///(circleMagenta,circleDeepBlueSky);
-
-    //Circle side by side
-    circleDeepBlueSky.xCenter = 40;
-    circleDeepBlueSky.yCenter = 80;
-    circleMagenta.xCenter = 30;
-    circleMagenta.yCenter = 80;
-    inscribeShapeinShape(circleDeepBlueSky, circleMagenta);
+    var outerShape = initializeShape(selItem,"outer");  
+    inscribeShapeinShape(innerShape,outerShape);
 }
 
-function initializeShape(type,option){
-    console.log("initializeShape");
-    var shape;
+function initializeShape(type, option) {
+    var shape = new Object();
     shape.type = type;
-    var input = document.getElementById("color_"+option);
+    var input = document.getElementById("color_" + option);
     shape.color = input.value;
-    input =document.getElementById("xcenter_"+option);
+     input = document.getElementById("xcenter_" + option);
     shape.xCenter = input.value;
-    input = document.getElementById("ycenter_"+option);
+     input = document.getElementById("ycenter_" + option);
     shape.yCenter = input.value;
-    input = document.getElementById("height_"+option);
+     input = document.getElementById("height_" + option);
     shape.height = input.value;
-    
-      if (type == "circle") {
-        shape.radius = shape.height/2;
+
+    if (type == "circle") {
+        shape.radius = shape.height / 2;
     }
     else {
         shape.edge = shape.height;
-    }
-    
-    return shape;
+    }   return shape;
 }
 
 //-------------------------------------------------------------------------------------------------------------------------
@@ -151,7 +141,7 @@ function initializeShape(type,option){
 //if smallShape is actually smaller than largeShape, 
 //otherwise, draw shapes side by side. 
 function inscribeShapeinShape(smallShape, largeShape){
-	
+	 
 	var compare =compareSize(smallShape, largeShape);
 	var xCoordinate=0;
 	
@@ -213,9 +203,6 @@ function getSize(shape){
 	return size;
 }
 
-
-
-
 //Takes the width of the larger shape to calculate the position of the smaller shape.
 //var horizontalShift = size1.width/2 + size2.width/2;
 function computeSideBySidePositions(shape1,shape2){
@@ -250,10 +237,11 @@ function computeConcentricPositions(smallShape,largeShape){
 
 function drawShape(shape){
 	if(shape.type=="circle"){
-		drawSquare(shape.xCenter, shape.yCenter, shape.radius, shape.color);
+		drawCircle(shape.xCenter, shape.yCenter, shape.radius, shape.color);
 	}
 	else
-		if(shape.type=="square") drawSquare(shape.xCenter, shape.yCenter, shape.width, shape.color);
+		if(shape.type=="square") 
+            drawSquare(shape.xCenter, shape.yCenter, shape.width, shape.color);
 }
 
 function drawCircle(x, y, radius, color) {
@@ -263,6 +251,7 @@ function drawCircle(x, y, radius, color) {
         ctx.beginPath();
         //console.log("circle: x="+x+",y="+y);
         var arcSize = 2 * Math.PI;
+        alert("ctx.arc(x="+x+",y="+y+",radius="+radius+",0,arcSize="+arcSize+")");
         ctx.arc(x, y, radius, 0, arcSize);
         ctx.strokeStyle = color;
         ctx.stroke();
@@ -278,6 +267,7 @@ function drawSquare(x, y, width, color) {
         var ctx = canvas.getContext("2d");
         ctx.moveTo(0, 0);
         ctx.strokeStyle = color;
+        alert("ctx.strokeRect(x="+x+",y="+y+",width="+width+",width="+width+")");
         ctx.strokeRect(x, y, width, width);
     }
     else { 

@@ -8,8 +8,8 @@
 <center>
 <h2>Inscriber</h2>
 
-<h3>Define the shapes to be inscribed and see how they fit together.</h3>
-
+Define the shapes to be inscribed and see how they fit together!
+<br>
 <table>
 <tr>
 <th>
@@ -53,10 +53,10 @@
             <b>Color:</b>
         </th>
         <th>
-            <input type="text" id="color_inner"  />
+            <input type="text" id="color_inner"  size=8 />
         </th>
         <th>
-            <input type="text" id="color_outer" />
+            <input type="text" id="color_outer" size=8 />
         </th>
     </tr>
     <tr>
@@ -64,10 +64,10 @@
             <b>xCenter:</b>
         </th>
         <th>
-            <input type="text" id="xcenter_inner" />
+            <input type="text" id="xcenter_inner" size=8 />
         </th>
         <th>
-            <input type="text" id="xcenter_outer" />
+            <input type="text" id="xcenter_outer" size=8 />
         </th>
     </tr>
     <tr>
@@ -75,10 +75,10 @@
             <b>yCenter:</b>
         </th>
         <th>
-            <input type="text" id="ycenter_inner" />
+            <input type="text" id="ycenter_inner" size=8 />
         </th>
         <th>
-            <input type="text" id="ycenter_outer" />
+            <input type="text" id="ycenter_outer" size=8 />
         </th>
     </tr>
    
@@ -87,17 +87,19 @@
             <b>Height:</b>
         </th>
         <th>
-            <input type="text" id="height_inner" />
+            <input type="text" id="height_inner"  size=8 />
         </th>
         <th>
-            <input type="text" id="height_outer" />
+            <input type="text" id="height_outer" size=8 />
         </th>
     </tr>
 </table>
 </th>
+ 
 <th>
 <center> 
 <br>
+Output<br>
     <canvas id="inscriberCanvas" width="130" height="130" style="border:1px solid #d3d3d3;">
     Your browser does not support the HTML5 canvas tag.</canvas>
     <script language="JavaScript" src="../src/Inscriber.js" type="text/javascript"></script>
@@ -107,12 +109,13 @@
 
 <tr>
     <th><center>
-       <input type="button"   value="Load Default Shapes" onclick="loadDefaultShapes();" />
-       <input type="button"   value="Inscribe them!" onclick="handleInscribeButton();" />
+       <input type="button"   value="Load Default" onclick="loadDefaultShapes();" />
+       <input type="button"   value="Inscribe!" onclick="handleInscribeButton();" />
     </center></th>
     
     <th><center>
-        <input type="button"   value="Clear Canvas" onclick="clearCanvas();" />
+      
+        <input type="button"   value="Clear" onclick="clearCanvas();" />
       
     </center></th>
     
