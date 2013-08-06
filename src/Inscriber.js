@@ -168,7 +168,7 @@ function sortShapesByHeight(shapeList){
     
     var heightsArray = new Array(shapeList.length);
     //Create an array of heights
-    for(var i;i<shapeList.length;i++){
+    for(var i=0;i<shapeList.length;i++){
         var shape = shapeList[i];
         heightsArray[i]=shape.height;
     }
@@ -200,7 +200,7 @@ function insertSort(Alist){
             i=j-1;
         }
         Alist[i+1]=key;
-        console.log(key);
+        alert(key);
     }
     return Alist;
 }
