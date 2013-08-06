@@ -151,18 +151,60 @@ function inscribeShapeinShape(smallShape, largeShape){
 	else{
 		xCoordinate = computeConcentricPositions(smallShape,largeShape);
 	}
-	
 	smallShape.xCenter = xCoordinate;
-	
 	var yCoordinate = computeYCoordinatePosition(smallShape, largeShape);
-	
 	//Shapes are always at same y coordinate
 	smallShape.yCenter = yCoordinate;
-	largeShape.yCenter = yCoordinate;
+	largeShape.yCenter = yCoordinate;    
 	
-	drawShape(largeShape);
-	drawShape(smallShape);
+    var shapeList = new Array(smallShape,largeShape);
+    var sortedList = sortShapesByHeight(shapeList);
+    for(var i=0;i<sortedList.length;i++){
+        drawShape(sortedList[i]);
+    }        
 }
+
+function sortShapesByHeight(shapeList){
+    
+    var heightsArray = new Array(shapeList.length);
+    //Create an array of heights
+    for(var i;i<shapeList.length;i++){
+        var shape = shapeList[i];
+        heightsArray[i]=shape.height;
+    }
+    
+    heightsArray = insertSort(heightsArray);
+    
+    var sortedList=new Array(shapeList.length);
+
+    if(shapeList[0].height == heightsArray[0]){
+        sortedList[0]= shapeList[0];
+        sortedList[1]= shapeList[1];
+    }
+    else{
+        sortedList[1]= shapeList[0];
+        sortedList[0]= shapeList[1];
+    }    
+    
+    return sortedList;    
+}
+
+
+function insertSort(Alist){
+
+    for(var j=1;j<Alist.length;j++){
+        var key = Alist[j];
+        var i=j-1;
+        while((i>=0 && Alist[i]>key)){
+            Alist[i+1]=Alist[i];
+            i=j-1;
+        }
+        Alist[i+1]=key;
+        console.log(key);
+    }
+    return Alist;
+}
+
 
 
 function compareSize(smallShape, largeShape){
@@ -187,9 +229,11 @@ function getSize(shape){
 	var height=0;
 	var width=0;
 	if(shape.type=="circle"){
+      
 		height=shape.radius*2; //take the diameter as size
 		width=height;
 	}
+    //alert(height);
 	
 	if(shape.type=="square"){
 		height=shape.edge;
@@ -207,9 +251,9 @@ function getSize(shape){
 //var horizontalShift = size1.width/2 + size2.width/2;
 function computeSideBySidePositions(shape1,shape2){
 	var size1 = getSize(shape1);
-	//var size2 = getSize(shape2); 
-	
-	var horizontalShift = size1.width/2;//size1.width/2 + size2.width/2;  
+	var size2 = getSize(shape2); 
+	//size1.width/2;//
+	var horizontalShift = size1.width/2 + size2.width/2;  
 	var xCoordinate=shape2.xCenter+ horizontalShift;
 	
 	return xCoordinate;
@@ -237,21 +281,22 @@ function computeConcentricPositions(smallShape,largeShape){
 
 function drawShape(shape){
 	if(shape.type=="circle"){
-		drawCircle(shape.xCenter, shape.yCenter, shape.radius, shape.color);
+		drawCircle(shape.xCenter, shape.yCenter, shape.height, shape.color);
 	}
 	else
 		if(shape.type=="square") 
-            drawSquare(shape.xCenter, shape.yCenter, shape.width, shape.color);
+            drawSquare(shape.xCenter, shape.yCenter, shape.height, shape.color);
 }
 
-function drawCircle(x, y, radius, color) {
-    var canvas = document.getElementById("inscriberCanvas");
+function drawCircle(x, y, diameter, color) {
+   var canvas = document.getElementById("inscriberCanvas");
     if (canvas != null && canvas.getContext) {
         var ctx = canvas.getContext("2d");
         ctx.beginPath();
-        //console.log("circle: x="+x+",y="+y);
+        var radius = diameter/2;
         var arcSize = 2 * Math.PI;
-        alert("ctx.arc(x="+x+",y="+y+",radius="+radius+",0,arcSize="+arcSize+")");
+        //!ctx.arc(3020,y,radius,0,arcSize);
+        //!!ctx.arc(x=52,y=20,radius=15,0,arcSize=6.283185307179586);
         ctx.arc(x, y, radius, 0, arcSize);
         ctx.strokeStyle = color;
         ctx.stroke();
@@ -275,3 +320,7 @@ function drawSquare(x, y, width, color) {
     }
 }
 
+// heightsArray.sort(function (a, b)
+    //{
+   //     return a-b;
+   // });
