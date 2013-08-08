@@ -173,7 +173,7 @@ function sortShapesByHeight(shapeList){
         heightsArray[i]=shape.height;
     }
     
-    heightsArray = insertSort(heightsArray);
+    heightsArray = insertSorter(heightsArray);
     
     var sortedList=new Array(shapeList.length);
 
@@ -200,12 +200,60 @@ function insertSort(Alist){
             i=j-1;
         }
         Alist[i+1]=key;
-        alert(key);
     }
     return Alist;
 }
 
+function insertSorter(Alist){
+//var Alist = [3,1,0,2];
+alert("Alist.length"+Alist.length);
+    for(var j=1;j<Alist.length;j++){
+        alert("j="+j);
+        var key = Alist[j];
+        alert("key="+key)
+        var i=j-1;
+        alert("i="+i);
+        while(i>=0){
+            
+            Alist[i+1]=Alist[i];
+            alert("Alist[i+1]="+Alist[i+1]);
+            alert("Alist[i]<=key "+Alist[i]+"<"+key);
+            if(Alist[i]<key){ 
+            
+                i=0;  
+             alert("i="+i);
+            }
+            else{
+            alert("else");
+                i=i-1;
+                 alert("else i="+i);
+            }
+        }
+        
+        Alist[i+1]=key;
+        alert("Alist[i+1]="+Alist[i+1]);
+        
+        
+    }
+    alert("Alist="+Alist);
+    return Alist;
+    
+}
 
+/**
+ * 
+Dependent variables and derived variables (from which we can obtain constraints for the debugging)
+
+3,1,1,2
+j=1;key=1;i=0;
+
+213 true
+A[i+1]=1;A[0]=3;
+215 true
+i=0;A[i+1]=1;A[0]=3;
+
+1,3,1,2
+*/
 
 function compareSize(smallShape, largeShape){
 	var smallSize = getSize(smallShape);
