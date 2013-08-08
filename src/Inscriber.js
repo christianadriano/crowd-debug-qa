@@ -205,7 +205,7 @@ function insertSort(Alist){
 }
 
 function insertSorter(Alist){
-//var Alist = [3,1,0,2];
+var Alist = [3,1,0,2];
 alert("Alist.length"+Alist.length);
     for(var j=1;j<Alist.length;j++){
         alert("j="+j);
@@ -213,7 +213,7 @@ alert("Alist.length"+Alist.length);
         alert("key="+key)
         var i=j-1;
         alert("i="+i);
-        while(i>=0){
+        while(i>0){
             
             Alist[i+1]=Alist[i];
             alert("Alist[i+1]="+Alist[i+1]);
