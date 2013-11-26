@@ -1,0 +1,6 @@
+shape.radius: 15
+shape.xCenter: 70
+shape.yCenter: 20
+shape.color: #800090
+shape.type: circle
+shape.option: inner
